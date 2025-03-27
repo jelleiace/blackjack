@@ -1,0 +1,1 @@
+clear console ANSI code source: https://unogeeks.com/python-clear-screen/#:~:text=The%20cls%20command%20is%20used,systems%20(Linux%2C%20macOS).&text=The%20ANSI%20escape%20code%20'%5C,screen%20on%20Unix%2Dbased%20systems.
