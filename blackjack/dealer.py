@@ -7,7 +7,7 @@ class Dealer:
                     print("The card is the " + dealHand[x].get_card_face() + " of " + dealHand[x].get_card_suit() + 
                           " with a value of " + str(dealHand[x].get_card_value()))
                 else:
-                    print("The card is currenly hidden.")
+                    print("The card is currenly hidden. " + str(dealSum))
             else:
                 print("The card is the " + dealHand[x].get_card_face() + " of " + dealHand[x].get_card_suit() + 
                       " with a value of " + str(dealHand[x].get_card_value()))

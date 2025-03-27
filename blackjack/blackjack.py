@@ -84,11 +84,6 @@ def main():
         if not winFlag:
             break
 
-        # if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
-        #     print("Push!")
-        #     checkAgain = False
-        #     break
-
         # Choose which player and ask H/S
         print(f"{playerTurn[x]}, would you like to hit or stand?")
 
@@ -114,25 +109,28 @@ def main():
             moveHistory.append(f"{playerTurn[x]} decided to stand.")
             x += 1
             playerMove = ""
-        os.system('cls')
+        os.system("cls")
 
-    while checkAgain:
-        # Display players' hands
+    while checkAgain: #scenario: no one went over 21 and no one won yet
+        # Display player's hand
         p1.display_P1Hand(playerTurn[0], p1Hand, gs.card_sum(p1Hand))
         d.display_dealerHand(dealerHand, gs.card_sum(dealerHand), playerTurn[len(playerTurn) - 1])
 
         if moveHistory:
-            print(moveHistory[-1])
+            print(moveHistory[len(moveHistory) - 1])
         print("-----------------------------------------------")
 
         for i in range(len(playerTurn)):
             if gs.compare_player_values(gs.card_sum(p1Hand), gs.card_sum(dealerHand), playerTurn) == playerTurn[i]:
                 print(f"{playerTurn[i]} won!")
                 break
+            if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
+                print("Push!")
+                checkAgain = False
+                break
 
         checkAgain = False
 
-    print("Press any key to end the game...")
     sys.exit()
 
 if __name__ == "__main__":
