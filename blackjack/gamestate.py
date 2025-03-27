@@ -10,7 +10,8 @@ class GameState:
         time.sleep(2.5)
         print("Drawing cards for the players...")
         time.sleep(2.5)
-        print("")
+        print("\033c", end="")
+
 
     def player_hand(self, cardHand):
         playerHand = cardHand.pop(0)

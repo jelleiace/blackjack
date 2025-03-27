@@ -18,7 +18,6 @@
 #dealer will also hit/stand [DONE]
 #display game winners and losers
 import time
-import os
 import sys
 from player1 import Player1
 from dealer import Dealer
@@ -109,7 +108,8 @@ def main():
             moveHistory.append(f"{playerTurn[x]} decided to stand.")
             x += 1
             playerMove = ""
-        os.system("cls")
+        
+        print("\033c", end="")
 
     while checkAgain: #scenario: no one went over 21 and no one won yet
         # Display player's hand

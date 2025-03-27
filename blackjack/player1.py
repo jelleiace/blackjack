@@ -6,7 +6,7 @@ class Player1:
         print("Welcome to the game!")
         print("-----------------------------")
         name = input("Hello, Player 1! please enter your name: ")
-        print("")
+        print("\033c", end="")
         return name
 
     def display_P1Hand(self, p1Name, p1Hand, p1Sum):
