@@ -1,4 +1,5 @@
 import time
+from winsound import PlaySound
 
 class GameState:
     def initialize_message(self, p1Name):
@@ -22,14 +23,22 @@ class GameState:
         return playerSum
 
     def hit_or_stand(self, playerSum, player):
-        choice = "S" if playerSum > 16 else "H"
+        playerMove = "" 
+        if playerSum > 16:
+            playerMove = "S"
+        else:
+            playerMove = "H"
         print(f"\n{player} is thinking...")
         time.sleep(3)
-        return choice
+        return playerMove
 
     def check_player_state(self, playerSum):
-        return playerSum <= 21
+        winFlag = True
+        if playerSum > 21:
+            winFlag = False
+        return winFlag 
 
+    #checks if card valuis over 21
     def check_21_win(self, p1Sum, dealSum, players):
         winner = ""
         if p1Sum == 21:
@@ -38,6 +47,7 @@ class GameState:
             winner = players[1]
         return winner
 
+    #checks if card value is greater than other player's card value
     def compare_player_values(self, p1Sum, dealSum, players):
         winner = ""
         if p1Sum > dealSum:

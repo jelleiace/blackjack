@@ -1,8 +1,12 @@
+from random import choice
+
+
 class Player1:
     def player1Name(name):
         print("Welcome to the game!")
         print("-----------------------------")
         name = input("Hello, Player 1! please enter your name: ")
+        print("")
         return name
 
     def display_P1Hand(self, p1Name, p1Hand, p1Sum):
@@ -12,13 +16,13 @@ class Player1:
         print("The sum of the cards is: " + str(p1Sum))
         print("")
 
-    def uInput():
-        input = ""
-        while true:
-            input = input("Do you want to hit or stay? Select either 'H' or 'S':")
-            if input == "H" or input == "S":
+    def uInput(self):
+        playerMove = ""
+        while True:
+            playerMove = input("Do you want to hit or stay? Select either 'H' or 'S': ").upper()
+            if playerMove == "H" or playerMove == "S":
                 break
             else:
                 print("Invalid input. Please enter 'H' to hit or 'S' to stay.")
                 print("")
-        return input
+        return playerMove

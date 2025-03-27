@@ -18,6 +18,8 @@
 #dealer will also hit/stand [DONE]
 #display game winners and losers
 import time
+import os
+import sys
 from player1 import Player1
 from dealer import Dealer
 from deckofcards import DeckOfCards
@@ -46,7 +48,7 @@ def main():
     gs.initialize_message(p1Name)
     playerTurn = [p1Name, "Dealer"]
     moveHistory = []
-    choice = ""
+    playerMove = ""
     x = 0
     p1Sum = 0
     dealerSum = 0
@@ -62,8 +64,8 @@ def main():
         p1.display_P1Hand(playerTurn[0], p1Hand, p1Sum)
         d.display_dealerHand(dealerHand, dealerSum, playerTurn[x])
 
-        if moveHistory:
-            print(moveHistory[-1])
+        if len(moveHistory) != 0:
+            print(moveHistory[len(moveHistory) - 1])
         print("-----------------------------------------------")
 
         #check player and game state
@@ -82,22 +84,22 @@ def main():
         if not winFlag:
             break
 
-        if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
-            print("Push!")
-            checkAgain = False
-            break
+        # if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
+        #     print("Push!")
+        #     checkAgain = False
+        #     break
 
         # Choose which player and ask H/S
         print(f"{playerTurn[x]}, would you like to hit or stand?")
 
         if x == 0:
-            choice = p1.uInput()
+            playerMove = p1.uInput()
         elif x == 1:
-            choice = gs.hit_or_stand(gs.card_sum(dealerHand), playerTurn[x])
+            playerMove = gs.hit_or_stand(gs.card_sum(dealerHand), playerTurn[x])
 
         # H/S logic
-        if choice == "H":
-            hand = doc.drawACard(1)
+        if playerMove == "H":
+            hand = doc.draw_cards(1)
 
             if x == 0:
                 p1Hand.append(gs.player_hand(hand))
@@ -108,15 +110,16 @@ def main():
 
             moveHistory.append(f"{playerTurn[x]} decided to hit.")
 
-        elif choice == "S":
+        elif playerMove == "S":
             moveHistory.append(f"{playerTurn[x]} decided to stand.")
             x += 1
-            choice = ""
+            playerMove = ""
+        os.system('cls')
 
     while checkAgain:
         # Display players' hands
-        p1.displayP1Hand(playerTurn[0], p1Hand, gs.card_sum(p1Hand))
-        d.displaydealerHand(dealerHand, gs.card_sum(dealerHand), playerTurn[2])
+        p1.display_P1Hand(playerTurn[0], p1Hand, gs.card_sum(p1Hand))
+        d.display_dealerHand(dealerHand, gs.card_sum(dealerHand), playerTurn[len(playerTurn) - 1])
 
         if moveHistory:
             print(moveHistory[-1])
@@ -130,7 +133,7 @@ def main():
         checkAgain = False
 
     print("Press any key to end the game...")
-    input()  # Wait for user input to end the game
+    sys.exit()
 
 if __name__ == "__main__":
     main()
