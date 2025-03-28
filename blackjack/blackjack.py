@@ -30,108 +30,117 @@ def main():
     d = Dealer()
     doc = DeckOfCards(True)
     gs = GameState()
-
     p1Name = p1.player1Name()
 
-    #drawing cards for each player
-    startCount = 0
-    p1Hand = []
-    dealerHand = []
-    hand = doc.draw_cards(4) #value of 4 came from: 2 players * 2 bc each player needs 2 cards
-    while startCount < 2:
-        p1Hand.append(gs.player_hand(hand))
-        dealerHand.append(gs.player_hand(hand))
-        startCount += 1
+    while(True):
+        #drawing cards for each player
+        startCount = 0
+        p1Hand = []
+        dealerHand = []
+        hand = doc.draw_cards(4) #value of 4 came from: 2 players * 2 bc each player needs 2 cards
+        while startCount < 2:
+            p1Hand.append(gs.player_hand(hand))
+            dealerHand.append(gs.player_hand(hand))
+            startCount += 1
 
-    #start game
-    gs.initialize_message(p1Name)
-    playerTurn = [p1Name, "Dealer"]
-    moveHistory = []
-    playerMove = ""
-    x = 0
-    p1Sum = 0
-    dealerSum = 0
-    currPlayerSum = 0
-    checkAgain = True
-    winFlag = True
+        #start game
+        gs.initialize_message(p1Name)
+        playerTurn = [p1Name, "Dealer"]
+        moveHistory = []
+        playerMove = ""
+        playerChoice = ""
+        x = 0
+        p1Sum = 0
+        dealerSum = 0
+        currPlayerSum = 0
+        checkAgain = True
+        winFlag = True
 
-    while x < len(playerTurn):
-        p1Sum = gs.card_sum(p1Hand)
-        dealerSum = gs.card_sum(dealerHand)
+        while x < len(playerTurn):
+            p1Sum = gs.card_sum(p1Hand)
+            dealerSum = gs.card_sum(dealerHand)
 
-        #display players' hands
-        p1.display_P1Hand(playerTurn[0], p1Hand, p1Sum)
-        d.display_dealerHand(dealerHand, dealerSum, playerTurn[x])
+            #display players' hands
+            p1.display_P1Hand(playerTurn[0], p1Hand, p1Sum)
+            d.display_dealerHand(dealerHand, dealerSum, playerTurn[x])
 
-        if len(moveHistory) != 0:
-            print(moveHistory[len(moveHistory) - 1])
-        print("-----------------------------------------------")
+            if len(moveHistory) != 0:
+                print(moveHistory[len(moveHistory) - 1])
+            print("-----------------------------------------------")
 
-        #check player and game state
-        if not gs.check_player_state(currPlayerSum):
-            print(f"{playerTurn[x]} busted!")
-            checkAgain = False
-            break
-
-        for i in range(len(playerTurn)):
-            if gs.check_21_win(p1Sum, dealerSum, playerTurn) == playerTurn[i]:
-                print(f"{playerTurn[i]} won!")
+            #check if the current player exceeds 21
+            if not gs.check_player_state(currPlayerSum):
+                print(f"{playerTurn[x]} busted!")
+                playerChoice = p1.uInputAgain()
                 checkAgain = False
-                winFlag = False
+                if playerChoice == "N":
+                    sys.exit()
                 break
 
-        if not winFlag:
-            break
+            #checks for a 21 win
+            for i in range(len(playerTurn)):
+                if gs.check_21_win(p1Sum, dealerSum, playerTurn) == playerTurn[i]:
+                    print(f"{playerTurn[i]} won!")
+                    playerChoice = p1.uInputAgain()
+                    checkAgain = False
+                    winFlag = False
+                    print("\033c", end="")
+                    break
 
-        # Choose which player and ask H/S
-        print(f"{playerTurn[x]}, would you like to hit or stand?")
+            if not winFlag:
+                break
 
-        if x == 0:
-            playerMove = p1.uInput()
-        elif x == 1:
-            playerMove = gs.hit_or_stand(gs.card_sum(dealerHand), playerTurn[x])
-
-        # H/S logic
-        if playerMove == "H":
-            hand = doc.draw_cards(1)
+            #choose which player and ask H/S
+            print(f"{playerTurn[x]}, would you like to hit or stand?")
 
             if x == 0:
-                p1Hand.append(gs.player_hand(hand))
-                currPlayerSum = gs.card_sum(p1Hand)
+                playerMove = p1.uInput()
             elif x == 1:
-                dealerHand.append(gs.player_hand(hand))
-                currPlayerSum = gs.card_sum(dealerHand)
+                playerMove = gs.hit_or_stand(gs.card_sum(dealerHand), playerTurn[x])
 
-            moveHistory.append(f"{playerTurn[x]} decided to hit.")
+            #H/S logic
+            if playerMove == "H":
+                hand = doc.draw_cards(1)
 
-        elif playerMove == "S":
-            moveHistory.append(f"{playerTurn[x]} decided to stand.")
-            x += 1
-            playerMove = ""
+                if x == 0:
+                    p1Hand.append(gs.player_hand(hand))
+                    currPlayerSum = gs.card_sum(p1Hand)
+                elif x == 1:
+                    dealerHand.append(gs.player_hand(hand))
+                    currPlayerSum = gs.card_sum(dealerHand)
+
+                moveHistory.append(f"{playerTurn[x]} decided to hit.")
+
+            elif playerMove == "S":
+                moveHistory.append(f"{playerTurn[x]} decided to stand.")
+                x += 1
+                playerMove = ""
         
-        print("\033c", end="")
+            print("\033c", end="")
 
-    while checkAgain: #scenario: no one went over 21 and no one won yet
-        # Display player's hand
-        p1.display_P1Hand(playerTurn[0], p1Hand, gs.card_sum(p1Hand))
-        d.display_dealerHand(dealerHand, gs.card_sum(dealerHand), playerTurn[len(playerTurn) - 1])
+        while checkAgain: #scenario: no one went over 21 and no one won yet
+            #display player's hand
+            p1.display_P1Hand(playerTurn[0], p1Hand, gs.card_sum(p1Hand))
+            d.display_dealerHand(dealerHand, gs.card_sum(dealerHand), playerTurn[len(playerTurn) - 1])
 
-        if moveHistory:
-            print(moveHistory[len(moveHistory) - 1])
-        print("-----------------------------------------------")
+            if moveHistory:
+                print(moveHistory[len(moveHistory) - 1])
+            print("-----------------------------------------------")
 
-        for i in range(len(playerTurn)):
-            if gs.compare_player_values(gs.card_sum(p1Hand), gs.card_sum(dealerHand), playerTurn) == playerTurn[i]:
-                print(f"{playerTurn[i]} won!")
-                break
-            if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
-                print("Push!")
-                checkAgain = False
-                break
-
-        checkAgain = False
-
-    sys.exit()
+            for i in range(len(playerTurn)):
+                if gs.compare_player_values(gs.card_sum(p1Hand), gs.card_sum(dealerHand), playerTurn) == playerTurn[i]:
+                    print(f"{playerTurn[i]} won!")
+                    playerChoice = p1.uInputAgain()
+                    break
+                if gs.compare_player_values(p1Sum, dealerSum, playerTurn) == "None":
+                    print("Push!")
+                    playerChoice = p1.uInputAgain()
+                    checkAgain = False
+                    break
+            if playerChoice == "N":
+                sys.exit()
+            
+            checkAgain = False
 
 if __name__ == "__main__":
     main()

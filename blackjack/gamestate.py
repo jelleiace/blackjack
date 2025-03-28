@@ -33,13 +33,14 @@ class GameState:
         time.sleep(3)
         return playerMove
 
+    #updates the winflag
     def check_player_state(self, playerSum):
         winFlag = True
         if playerSum > 21:
             winFlag = False
         return winFlag 
 
-    #checks if card valuis over 21
+    #checks if card value is equal to 21
     def check_21_win(self, p1Sum, dealSum, players):
         winner = ""
         if p1Sum == 21:

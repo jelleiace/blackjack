@@ -26,3 +26,14 @@ class Player1:
                 print("Invalid input. Please enter 'H' to hit or 'S' to stay.")
                 print("")
         return playerMove
+
+    def uInputAgain(self):
+        playerChoice = ""
+        while True:
+            playerChoice = input("Do you want to play again? 'Y' for Yes or 'N' for No: ").upper()
+            if playerChoice == "Y" or playerChoice == "N":
+                break
+            else:
+                print("Invalid input. Please enter 'Y' for Yes or 'N' for No.")
+                print("")
+        return playerChoice
